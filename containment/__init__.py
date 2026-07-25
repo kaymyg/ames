@@ -1,7 +1,8 @@
-"""Containment layers L1, L2, L5, L7, L9: physical isolation, zero external
-trust, behavioural fingerprinting, environment mutation detection, and the
-autonomous kill system -- all producing or consuming host-observed AMES (L8)
-events."""
+"""Containment layers L1, L2, L5, L6, L7, L9: physical isolation, zero external
+trust, behavioural fingerprinting, cognitive drift detection, environment
+mutation detection, and the autonomous kill system -- all producing or
+consuming AMES (L8) events. Every layer but L6 reads only host-observed
+events; L6 is the deliberate, documented exception."""
 from containment.vmspec import (
     VmSpec, DiskSpec, IsolationPolicy, PolicyViolation,
     HOST_ACTOR_ID, VM_ACTOR_ID, HOST_ACTOR_RANGE_START, is_host_observed,
@@ -31,6 +32,9 @@ from containment.fingerprint import (
     BehaviorFingerprint, BehaviorObservation, SequenceVerdict, FingerprintError,
     observations_from_ledger,
 )
+from containment.drift import (
+    DriftMonitor, DriftFinding, DriftReason, narrative_from_ledger,
+)
 
 __all__ = [
     "VmSpec", "DiskSpec", "IsolationPolicy", "PolicyViolation",
@@ -49,4 +53,5 @@ __all__ = [
     "FATAL_GATE1_CODES", "kill_payload",
     "BehaviorFingerprint", "BehaviorObservation", "SequenceVerdict",
     "FingerprintError", "observations_from_ledger",
+    "DriftMonitor", "DriftFinding", "DriftReason", "narrative_from_ledger",
 ]
