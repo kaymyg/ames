@@ -1,4 +1,7 @@
-"""L1 -- Physical Isolation. Ephemeral microVMs with a host-side AMES producer."""
+"""Containment layers L1, L2, L5, L7, L9: physical isolation, zero external
+trust, behavioural fingerprinting, environment mutation detection, and the
+autonomous kill system -- all producing or consuming host-observed AMES (L8)
+events."""
 from containment.vmspec import (
     VmSpec, DiskSpec, IsolationPolicy, PolicyViolation,
     HOST_ACTOR_ID, VM_ACTOR_ID, HOST_ACTOR_RANGE_START, is_host_observed,
@@ -24,6 +27,10 @@ from containment.killswitch import (
 from containment.transport import (
     GuestEventReader, GuestClaim, TransportError, TransportLimitExceeded, encode_frame,
 )
+from containment.fingerprint import (
+    BehaviorFingerprint, BehaviorObservation, SequenceVerdict, FingerprintError,
+    observations_from_ledger,
+)
 
 __all__ = [
     "VmSpec", "DiskSpec", "IsolationPolicy", "PolicyViolation",
@@ -40,4 +47,6 @@ __all__ = [
     "MutationVerdict", "PathClass", "PathPolicy", "EnvStateError", "normalise",
     "KillSwitch", "KillVerdict", "KillReason", "Evidence", "ABSOLUTE_REASONS",
     "FATAL_GATE1_CODES", "kill_payload",
+    "BehaviorFingerprint", "BehaviorObservation", "SequenceVerdict",
+    "FingerprintError", "observations_from_ledger",
 ]

@@ -112,9 +112,9 @@ kill — they are not, alone, evidence that attribution is broken.
 
 ## Next
 
-**L5** (behavioural fingerprinting) needs a frozen reference baseline — a
-detector retrained on live traffic learns the attack. **L6** last and advisory
-only: reading reasoning traces assumes they are faithful, which is precisely what
-MCL's concealment dimension says not to assume. Then **L0**, the adversarial
-validation engine, which is what turns every "not verified here" note in these
-docs into something checked on real hardware.
+**L5** (behavioural fingerprinting) is built — see `docs/l5_fingerprint.md`.
+**L6** is next, last and advisory only: reading reasoning traces assumes they
+are faithful, which is precisely what MCL's concealment dimension says not to
+assume. Then **L0**, the adversarial validation engine, which is what turns
+every "not verified here" note in these docs into something checked on real
+hardware.

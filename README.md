@@ -55,20 +55,35 @@ gate1_verify(list(led.all_events())).raise_if_failed()
 ## Layout
 
 ```
-ames/events.py      wire schema
-ames/canonical.py   deterministic encoding (41-byte header)
-ames/commit.py      domain-separated BLAKE3, merkle + inclusion proofs
-ames/ledger.py      hash-linked blocks, checkpoints
-ames/gate1.py       structural verification (lineage balance)
-vectors/            pinned cross-language conformance vectors
-docs/               full specification
+ames/events.py              wire schema
+ames/canonical.py           deterministic encoding (41-byte header)
+ames/commit.py               domain-separated BLAKE3, merkle + inclusion proofs
+ames/ledger.py                hash-linked blocks, checkpoints
+ames/gate1.py                 structural verification (lineage balance)
+vectors/                      pinned cross-language conformance vectors
+docs/                         full specification, one doc per layer
+containment/vmspec.py         L1 — VM spec, no-network invariant
+containment/backend.py        L1 — VM backend interface, Firecracker adapter
+containment/supervisor.py     L1 — host-side supervisor, AMES producer
+containment/transport.py      L1 — guest→host event transport
+containment/policy.py         L2 — capability policy engine
+containment/broker.py         L2 — broker, denial-burst + EWMA tracker
+containment/fingerprint.py    L5 — behavioural fingerprinting
+containment/envstate.py       L7 — environment mutation detection
+containment/killswitch.py     L9 — autonomous kill system
 ```
 
 ## Status
 
-Reference implementation complete, 37 tests passing, vectors pinned. Python for
+AMES (L8) reference implementation complete, vectors pinned. Python for
 auditability; a Rust implementation validated against `vectors/` is the intended
-production path. Layers 1, 2, 5, 6, 7, 9 are not built — see spec §7 for the
-recommended order and the one layer missing from the original design.
+production path.
+
+Containment layers L1, L2, L5, L7, L9 are built, each with an adversarial test
+suite and a doc under `docs/`. 222 tests passing across the whole repo
+(`python -m pytest tests/ -q`). **L6** (cognitive drift detection, advisory
+only) and **L0** (the adversarial validation engine) are not built yet — see
+`docs/l9_kill_system.md` and `docs/l5_fingerprint.md` for the reasoning behind
+the build order.
 
 MIT.

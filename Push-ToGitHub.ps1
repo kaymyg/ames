@@ -221,7 +221,7 @@ if (-not $hasCommit) {
 }
 elseif ($hasStaged) {
     Invoke-Git @('-c', 'user.email=onlyairdropshere@gmail.com', '-c', 'user.name=Sahek',
-                 'commit', '--quiet', '-m', 'Update AMES reference implementation')
+                 'commit', '--quiet', '-m', 'L5: behavioural fingerprinting (frozen host-observed capability-stream baseline; 24 tests, 222 total)')
     Write-Ok "committed local changes"
 }
 else {
