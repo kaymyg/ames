@@ -8,6 +8,11 @@ from containment.backend import (
     build_firecracker_config,
 )
 from containment.supervisor import Supervisor, RunReport, GUEST_ACTOR_BASE
+from containment.policy import (
+    CapabilityPolicy, CapabilityRequest, Decision, PolicyVerdict, PinnedPackage,
+    default_policy, NEVER_IN_RUN, DEFERRED,
+)
+from containment.broker import Broker, BrokerDecision, DenialTracker, DenialSignal
 from containment.transport import (
     GuestEventReader, GuestClaim, TransportError, TransportLimitExceeded, encode_frame,
 )
@@ -20,4 +25,7 @@ __all__ = [
     "Supervisor", "RunReport", "GUEST_ACTOR_BASE",
     "GuestEventReader", "GuestClaim", "TransportError", "TransportLimitExceeded",
     "encode_frame",
+    "CapabilityPolicy", "CapabilityRequest", "Decision", "PolicyVerdict",
+    "PinnedPackage", "default_policy", "NEVER_IN_RUN", "DEFERRED",
+    "Broker", "BrokerDecision", "DenialTracker", "DenialSignal",
 ]
