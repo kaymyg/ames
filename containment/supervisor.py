@@ -88,6 +88,20 @@ class Supervisor:
         self._seq += 1
         self._host_events += 1
 
+    def emit_host_event(self, etype: EventType, payload: bytes = b"") -> None:
+        """Public seam for another HOST-side component to record its own
+        observations into this run's ledger, attributed to `HOST_ACTOR_ID`.
+
+        L2's broker is the first real user: `Broker(emit=supervisor.emit_host_event)`
+        lets a broker decision made during this run land in the same
+        sequence-numbered stream L1 and L8 already produce, instead of living
+        in a separate, uncorrelated log. This is deliberately a thin wrapper
+        around `_emit_host` with no new behaviour -- the broker is host-side
+        code making a host-side observation, exactly like the measurement and
+        lifecycle events the supervisor already emits, so it gets no special
+        case."""
+        self._emit_host(etype, payload)
+
     def record_guest_claim(self, etype: EventType, payload: bytes = b"",
                            actor: Optional[int] = None) -> int:
         """Record something the guest reported over vsock.

@@ -84,10 +84,9 @@ mechanism proves tampering when it's present, not its absence.
 
 ## Next
 
-**L0**, the adversarial validation engine — the layer that turns every "not
-verified here" note across `docs/*.md` into something checked on real
-hardware, and the one piece of the original design not yet started. Worth a
-short pass first on whether **L3** (immutable filesystem) and **L4** (identity
-verification) from the original nine-layer spec are genuinely subsumed by L1's
-read-only rootfs and L8's process-lineage verification, or were simply never
-built.
+**L0**, the adversarial validation engine, is built — see
+`docs/l0_validation.md`, including the scenario that structurally proves the
+"L6 cannot kill" claim made above rather than just asserting it. What's left:
+whether **L3** (immutable filesystem) and **L4** (identity verification) from
+the original nine-layer spec are genuinely subsumed by L1's read-only rootfs
+and L8's process-lineage verification, or were simply never built.
