@@ -13,6 +13,10 @@ from containment.policy import (
     default_policy, NEVER_IN_RUN, DEFERRED,
 )
 from containment.broker import Broker, BrokerDecision, DenialTracker, DenialSignal
+from containment.envstate import (
+    EnvironmentBaseline, EnvironmentMonitor, MutationObservation, MutationVerdict,
+    PathClass, PathPolicy, EnvStateError, normalise,
+)
 from containment.transport import (
     GuestEventReader, GuestClaim, TransportError, TransportLimitExceeded, encode_frame,
 )
@@ -28,4 +32,6 @@ __all__ = [
     "CapabilityPolicy", "CapabilityRequest", "Decision", "PolicyVerdict",
     "PinnedPackage", "default_policy", "NEVER_IN_RUN", "DEFERRED",
     "Broker", "BrokerDecision", "DenialTracker", "DenialSignal",
+    "EnvironmentBaseline", "EnvironmentMonitor", "MutationObservation",
+    "MutationVerdict", "PathClass", "PathPolicy", "EnvStateError", "normalise",
 ]
