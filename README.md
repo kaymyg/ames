@@ -69,6 +69,7 @@ containment/transport.py      L1 — guest→host event transport
 containment/policy.py         L2 — capability policy engine
 containment/broker.py         L2 — broker, denial-burst + EWMA tracker
 containment/fingerprint.py    L5 — behavioural fingerprinting
+containment/drift.py          L6 — cognitive drift detection (advisory only)
 containment/envstate.py       L7 — environment mutation detection
 containment/killswitch.py     L9 — autonomous kill system
 ```
@@ -79,11 +80,12 @@ AMES (L8) reference implementation complete, vectors pinned. Python for
 auditability; a Rust implementation validated against `vectors/` is the intended
 production path.
 
-Containment layers L1, L2, L5, L7, L9 are built, each with an adversarial test
-suite and a doc under `docs/`. 222 tests passing across the whole repo
-(`python -m pytest tests/ -q`). **L6** (cognitive drift detection, advisory
-only) and **L0** (the adversarial validation engine) are not built yet — see
-`docs/l9_kill_system.md` and `docs/l5_fingerprint.md` for the reasoning behind
-the build order.
+Containment layers L1, L2, L5, L6, L7, L9 are built, each with an adversarial
+test suite and a doc under `docs/`. 235 tests passing across the whole repo
+(`python -m pytest tests/ -q`). **L0** (the adversarial validation engine) is
+what's left from the original design — see `docs/l6_drift.md` for the reasoning
+behind the build order. Whether **L3** (immutable filesystem) and **L4**
+(identity verification) are genuinely subsumed by L1/L8 or simply never built
+is an open question, not yet resolved either way.
 
 MIT.

@@ -127,8 +127,7 @@ review.
 
 ## Next
 
-**L6** (cognitive drift detection) is last and advisory only — reading reasoning
-traces assumes they are faithful, which is exactly what `multi-agent-mcl`'s
-concealment dimension says not to assume. Then **L0**, the adversarial
-validation engine, which turns every "not verified here" note across these docs
-into something checked on real hardware.
+**L6** (cognitive drift detection) is built — see `docs/l6_drift.md`. **L0**,
+the adversarial validation engine, is what's left: the layer that turns every
+"not verified here" note across these docs into something checked on real
+hardware.
