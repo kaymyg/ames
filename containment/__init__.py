@@ -17,6 +17,10 @@ from containment.envstate import (
     EnvironmentBaseline, EnvironmentMonitor, MutationObservation, MutationVerdict,
     PathClass, PathPolicy, EnvStateError, normalise,
 )
+from containment.killswitch import (
+    KillSwitch, KillVerdict, KillReason, Evidence, ABSOLUTE_REASONS,
+    FATAL_GATE1_CODES, kill_payload,
+)
 from containment.transport import (
     GuestEventReader, GuestClaim, TransportError, TransportLimitExceeded, encode_frame,
 )
@@ -34,4 +38,6 @@ __all__ = [
     "Broker", "BrokerDecision", "DenialTracker", "DenialSignal",
     "EnvironmentBaseline", "EnvironmentMonitor", "MutationObservation",
     "MutationVerdict", "PathClass", "PathPolicy", "EnvStateError", "normalise",
+    "KillSwitch", "KillVerdict", "KillReason", "Evidence", "ABSOLUTE_REASONS",
+    "FATAL_GATE1_CODES", "kill_payload",
 ]
