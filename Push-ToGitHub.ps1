@@ -75,6 +75,39 @@ function Invoke-Git {
     finally { Pop-Location }
 }
 
+
+function Invoke-GitCapture {
+    <#
+        Runs git and returns its combined output plus exit code, WITHOUT ever
+        throwing -- for the cases where a nonzero exit is expected information
+        rather than a failure (no remote yet, no commit yet, no staged changes).
+
+        PowerShell 5.1 converts a native command's REDIRECTED stderr into a
+        terminating NativeCommandError whenever $ErrorActionPreference is
+        'Stop'. `git remote get-url origin` errors normally when no remote has
+        been added, which is exactly the first-run state, so the preference is
+        relaxed for the duration of the call and restored afterwards.
+        $PSNativeCommandUseErrorActionPreference does not exist before 7.3 and
+        cannot be relied on here.
+    #>
+    param([string[]]$Arguments, [string]$WorkingDirectory = $PSScriptRoot)
+
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    Push-Location $WorkingDirectory
+    try {
+        $output = (& git @Arguments 2>&1 | Out-String)
+        return [pscustomobject]@{
+            Output   = $output.Trim()
+            ExitCode = $LASTEXITCODE
+        }
+    }
+    finally {
+        Pop-Location
+        $ErrorActionPreference = $previous
+    }
+}
+
 $root = $PSScriptRoot
 if (-not $root) { $root = (Get-Location).Path }
 
@@ -171,21 +204,12 @@ if (-not (Test-Path (Join-Path $root '.git'))) {
     Write-Ok "initialised on main"
 }
 
-Push-Location $root
-try {
-    & git rev-parse --verify HEAD 2>$null | Out-Null
-    $hasCommit = ($LASTEXITCODE -eq 0)
-}
-finally { Pop-Location }
+$hasCommit = (Invoke-GitCapture @('rev-parse', '--verify', 'HEAD') -WorkingDirectory $root).ExitCode -eq 0
 
 Invoke-Git @('add', '-A')
 
-Push-Location $root
-try {
-    & git diff --cached --quiet
-    $hasStaged = ($LASTEXITCODE -ne 0)
-}
-finally { Pop-Location }
+# --quiet exits 1 when staged differences exist.
+$hasStaged = (Invoke-GitCapture @('diff', '--cached', '--quiet') -WorkingDirectory $root).ExitCode -ne 0
 
 if (-not $hasCommit) {
     $msgFile = Join-Path $env:TEMP "ames-commit-$(Get-Random).txt"
@@ -207,12 +231,9 @@ else {
 # Normalise the branch name; GitHub defaults to main.
 Invoke-Git @('branch', '-M', 'main')
 
-Push-Location $root
-try {
-    $fileCount = (& git ls-files).Count
-    $headLine  = (& git log --oneline -1)
-}
-finally { Pop-Location }
+$fileCount = @((Invoke-GitCapture @('ls-files') -WorkingDirectory $root).Output -split "`n" |
+                Where-Object { $_.Trim() }).Count
+$headLine  = (Invoke-GitCapture @('log', '--oneline', '-1') -WorkingDirectory $root).Output
 Write-Ok "$fileCount tracked files | HEAD: $headLine"
 
 # ---------------------------------------------------------------------------
@@ -223,12 +244,9 @@ Write-Step "Remote"
 
 $url = "https://github.com/$GitHubUser/$RepoName.git"
 
-Push-Location $root
-try {
-    $existing = (& git remote get-url origin 2>$null)
-    $hasOrigin = ($LASTEXITCODE -eq 0)
-}
-finally { Pop-Location }
+$originLookup = Invoke-GitCapture @('remote', 'get-url', 'origin') -WorkingDirectory $root
+$hasOrigin = ($originLookup.ExitCode -eq 0)
+$existing  = $originLookup.Output
 
 if ($hasOrigin) {
     if ($existing.Trim() -ne $url) {
@@ -243,12 +261,9 @@ else {
 }
 
 # Confirm the target exists and is empty before attempting a push.
-Push-Location $root
-try {
-    $remoteRefs = (& git ls-remote --heads origin 2>&1 | Out-String)
-    $reachable = ($LASTEXITCODE -eq 0)
-}
-finally { Pop-Location }
+$lsRemote   = Invoke-GitCapture @('ls-remote', '--heads', 'origin') -WorkingDirectory $root
+$reachable  = ($lsRemote.ExitCode -eq 0)
+$remoteRefs = $lsRemote.Output
 
 if (-not $reachable) {
     Write-Warn "cannot reach $url"
