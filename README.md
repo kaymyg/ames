@@ -72,6 +72,8 @@ containment/fingerprint.py    L5 — behavioural fingerprinting
 containment/drift.py          L6 — cognitive drift detection (advisory only)
 containment/envstate.py       L7 — environment mutation detection
 containment/killswitch.py     L9 — autonomous kill system
+validation/scenarios.py       L0 — full-stack composed adversarial scenarios
+validation/properties.py      L0 — Hypothesis strategies for property-based tests
 ```
 
 ## Status
@@ -81,11 +83,15 @@ auditability; a Rust implementation validated against `vectors/` is the intended
 production path.
 
 Containment layers L1, L2, L5, L6, L7, L9 are built, each with an adversarial
-test suite and a doc under `docs/`. 235 tests passing across the whole repo
-(`python -m pytest tests/ -q`). **L0** (the adversarial validation engine) is
-what's left from the original design — see `docs/l6_drift.md` for the reasoning
-behind the build order. Whether **L3** (immutable filesystem) and **L4**
-(identity verification) are genuinely subsumed by L1/L8 or simply never built
-is an open question, not yet resolved either way.
+test suite and a doc under `docs/`. **L0** (the adversarial validation engine)
+is also built, within an honestly stated scope — see `docs/l0_validation.md`
+for exactly what it does and does not check (no real hardware access in this
+environment; composition and logical invariants only). 250 tests passing
+across the whole repo (`python -m pytest tests/ -q`).
+
+Whether **L3** (immutable filesystem) and **L4** (identity verification) from
+the original nine-layer design are genuinely subsumed by L1/L8 or simply never
+built is an open question, not yet resolved either way — the last piece of the
+original design left to settle.
 
 MIT.
