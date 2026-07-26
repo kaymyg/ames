@@ -34,8 +34,28 @@ so nobody assumes otherwise.
 
 ```bash
 pip install -r requirements.txt
-python -m pytest tests/ -q     # 37 tests
+python -m pytest tests/ -q                    # 292 tests
+python examples/run_contained_agent.py        # runnable end-to-end demo
 ```
+
+Run an agent under all nine layers:
+
+```python
+from containment.runtime import Runtime, RuntimeConfig
+from containment.backend import FakeBackend
+
+report = Runtime(RuntimeConfig()).execute(spec, FakeBackend())
+
+print(report.summary())   # run demo-01: ALLOWED
+report.allowed            # bool
+report.verify()           # independently re-checks the ledger vs its checkpoint
+```
+
+`FakeBackend` needs no KVM and no root, so the demo runs anywhere. Swapping in
+`FirecrackerBackend` is the single line that differs from a real deployment —
+and the one line no test here exercises (see `docs/l0_validation.md`).
+
+The L8 ledger is usable directly if you only want the tamper-evident record:
 
 ```python
 from ames import Ledger, Event, EventType, NO_PARENT, gate1_verify
@@ -68,6 +88,7 @@ containment/supervisor.py     L1 — host-side supervisor, AMES producer
 containment/transport.py      L1 — guest→host event transport
 containment/policy.py         L2 — capability policy engine
 containment/broker.py         L2 — broker, denial-burst + EWMA tracker
+containment/runtime.py        the composed L1-L9 entrypoint  <-- start here
 containment/identity.py       L3/L4 — binary allowlist + spawn authorization
 containment/fingerprint.py    L5 — behavioural fingerprinting
 containment/drift.py          L6 — cognitive drift detection (advisory only)
@@ -75,6 +96,7 @@ containment/envstate.py       L7 — environment mutation detection
 containment/killswitch.py     L9 — autonomous kill system
 validation/scenarios.py       L0 — full-stack composed adversarial scenarios
 validation/properties.py      L0 — Hypothesis strategies for property-based tests
+examples/                     runnable end-to-end demo
 ```
 
 ## Status
@@ -85,7 +107,8 @@ production path.
 
 All nine containment layers are built, each with an adversarial test suite and
 a doc under `docs/`, plus **L0** (the adversarial validation engine) within an
-honestly stated scope. **272 tests passing** across the whole repo
+honestly stated scope, and a **composed Runtime** (`docs/runtime.md`) that
+wires them into one entrypoint. **292 tests passing** across the whole repo
 (`python -m pytest tests/ -q`).
 
 Two documents state the limits rather than burying them:

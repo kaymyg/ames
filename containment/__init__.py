@@ -41,6 +41,10 @@ from containment.identity import (
     BinaryPolicy, SpawnAuthorizer, SpawnVerdict, SpawnDenial, IdentityError,
     binary_hash_from_spawn_payload,
 )
+from containment.runtime import (
+    Runtime, RuntimeConfig, ContainmentReport, RunContext,
+    Verdict, ALLOWED, KILLED, FAILED,
+)
 
 __all__ = [
     "VmSpec", "DiskSpec", "IsolationPolicy", "PolicyViolation",
@@ -62,4 +66,6 @@ __all__ = [
     "DriftMonitor", "DriftFinding", "DriftReason", "narrative_from_ledger",
     "BinaryPolicy", "SpawnAuthorizer", "SpawnVerdict", "SpawnDenial",
     "IdentityError", "binary_hash_from_spawn_payload",
+    "Runtime", "RuntimeConfig", "ContainmentReport", "RunContext",
+    "Verdict", "ALLOWED", "KILLED", "FAILED",
 ]
