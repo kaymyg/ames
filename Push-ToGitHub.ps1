@@ -221,7 +221,7 @@ if (-not $hasCommit) {
 }
 elseif ($hasStaged) {
     Invoke-Git @('-c', 'user.email=kaymyg@proton.me', '-c', 'user.name=Sahek',
-                 'commit', '--quiet', '-m', 'L5: behavioural fingerprinting (frozen host-observed capability-stream baseline; 24 tests, 222 total)')
+                 'commit', '--quiet', '-m', 'Runtime: composed L1-L9 entrypoint with worked example (20 tests, 292 total)')
     Write-Ok "committed local changes"
 }
 else {
