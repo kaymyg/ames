@@ -68,6 +68,7 @@ containment/supervisor.py     L1 — host-side supervisor, AMES producer
 containment/transport.py      L1 — guest→host event transport
 containment/policy.py         L2 — capability policy engine
 containment/broker.py         L2 — broker, denial-burst + EWMA tracker
+containment/identity.py       L3/L4 — binary allowlist + spawn authorization
 containment/fingerprint.py    L5 — behavioural fingerprinting
 containment/drift.py          L6 — cognitive drift detection (advisory only)
 containment/envstate.py       L7 — environment mutation detection
@@ -82,16 +83,21 @@ AMES (L8) reference implementation complete, vectors pinned. Python for
 auditability; a Rust implementation validated against `vectors/` is the intended
 production path.
 
-Containment layers L1, L2, L5, L6, L7, L9 are built, each with an adversarial
-test suite and a doc under `docs/`. **L0** (the adversarial validation engine)
-is also built, within an honestly stated scope — see `docs/l0_validation.md`
-for exactly what it does and does not check (no real hardware access in this
-environment; composition and logical invariants only). 250 tests passing
-across the whole repo (`python -m pytest tests/ -q`).
+All nine containment layers are built, each with an adversarial test suite and
+a doc under `docs/`, plus **L0** (the adversarial validation engine) within an
+honestly stated scope. **272 tests passing** across the whole repo
+(`python -m pytest tests/ -q`).
 
-Whether **L3** (immutable filesystem) and **L4** (identity verification) from
-the original nine-layer design are genuinely subsumed by L1/L8 or simply never
-built is an open question, not yet resolved either way — the last piece of the
-original design left to settle.
+Two documents state the limits rather than burying them:
+`docs/l0_validation.md` (what L0 does and does not check — no real hardware in
+this environment, so composition and logical invariants only) and
+`docs/l3_l4_audit.md` (a per-claim audit of L3/L4 against the original spec,
+including the two claims that were *not* covered before it and what closing
+them did and did not buy).
+
+The honest summary of where this lands: **strong at making violations
+unforgeable and attributable, weaker at making them impossible.** Prevention
+lives in the hypervisor and the guest image, not in Python — which is L1's
+premise, and is why the remaining work is all hardware-dependent.
 
 MIT.

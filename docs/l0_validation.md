@@ -156,10 +156,11 @@ example-based testing are complementary rather than redundant.
 
 ## What's left
 
-**L3** (immutable filesystem) and **L4** (identity verification) from the
-original nine-layer design were never built as separate modules. Whether
-they're genuinely subsumed by L1's read-only rootfs and L8's process-lineage
-verification, or simply skipped, hasn't been resolved either way — the
-honest status is "unresolved," not "covered." A real answer requires reading
-the original L3/L4 specification line by line against what L1/L8 actually
-enforce, which hasn't happened yet.
+**Resolved since this doc was written:** the L3/L4 question is answered in
+`docs/l3_l4_audit.md` — about half subsumed by L1/L8, half not, with the
+un-subsumed half (per-binary verification, spawn-token authorization) now
+implemented host-side in `containment/identity.py`.
+
+What remains is only the hardware-dependent work named above: exercising
+`FirecrackerBackend` on a host with `/dev/kvm`, validating the fanotify/eBPF
+collector, and confirming vsock's one-directionality.
