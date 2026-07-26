@@ -214,14 +214,14 @@ $hasStaged = (Invoke-GitCapture @('diff', '--cached', '--quiet') -WorkingDirecto
 if (-not $hasCommit) {
     $msgFile = Join-Path $env:TEMP "ames-commit-$(Get-Random).txt"
     [System.IO.File]::WriteAllText($msgFile, $CommitMessage, (New-Object System.Text.UTF8Encoding($false)))
-    Invoke-Git @('-c', 'user.email=onlyairdropshere@gmail.com', '-c', 'user.name=Sahek',
+    Invoke-Git @('-c', 'user.email=kaymyg@proton.me', '-c', 'user.name=Sahek',
                  'commit', '--quiet', '-F', $msgFile)
     Remove-Item $msgFile -ErrorAction SilentlyContinue
     Write-Ok "created initial commit"
 }
 elseif ($hasStaged) {
-    Invoke-Git @('-c', 'user.email=onlyairdropshere@gmail.com', '-c', 'user.name=Sahek',
-                 'commit', '--quiet', '-m', 'L5: behavioural fingerprinting (frozen host-observed capability-stream baseline; 24 tests, 222 total)')
+    Invoke-Git @('-c', 'user.email=kaymyg@proton.me', '-c', 'user.name=Sahek',
+                 'commit', '--quiet', '-m', 'Runtime: composed L1-L9 entrypoint with worked example (20 tests, 292 total)')
     Write-Ok "committed local changes"
 }
 else {
