@@ -1,8 +1,10 @@
-"""Containment layers L1, L2, L5, L6, L7, L9: physical isolation, zero external
-trust, behavioural fingerprinting, cognitive drift detection, environment
-mutation detection, and the autonomous kill system -- all producing or
-consuming AMES (L8) events. Every layer but L6 reads only host-observed
-events; L6 is the deliberate, documented exception."""
+"""Containment layers L1-L9: physical isolation, zero external trust, binary
+verification and spawn authorization, behavioural fingerprinting, cognitive
+drift detection, environment mutation detection, and the autonomous kill
+system -- all producing or consuming AMES (L8) events. Every layer but L6
+reads only host-observed events; L6 is the deliberate, documented exception.
+See docs/l3_l4_audit.md for exactly which parts of L3/L4 are enforced here
+versus which need kernel-side enforcement in the guest image."""
 from containment.vmspec import (
     VmSpec, DiskSpec, IsolationPolicy, PolicyViolation,
     HOST_ACTOR_ID, VM_ACTOR_ID, HOST_ACTOR_RANGE_START, is_host_observed,
@@ -35,6 +37,10 @@ from containment.fingerprint import (
 from containment.drift import (
     DriftMonitor, DriftFinding, DriftReason, narrative_from_ledger,
 )
+from containment.identity import (
+    BinaryPolicy, SpawnAuthorizer, SpawnVerdict, SpawnDenial, IdentityError,
+    binary_hash_from_spawn_payload,
+)
 
 __all__ = [
     "VmSpec", "DiskSpec", "IsolationPolicy", "PolicyViolation",
@@ -54,4 +60,6 @@ __all__ = [
     "BehaviorFingerprint", "BehaviorObservation", "SequenceVerdict",
     "FingerprintError", "observations_from_ledger",
     "DriftMonitor", "DriftFinding", "DriftReason", "narrative_from_ledger",
+    "BinaryPolicy", "SpawnAuthorizer", "SpawnVerdict", "SpawnDenial",
+    "IdentityError", "binary_hash_from_spawn_payload",
 ]
