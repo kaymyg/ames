@@ -1,0 +1,21 @@
+# Updates arrive grouped: one PR per ecosystem per week for minor/patch
+# bumps, so the queue stays reviewable. Major versions still get their own
+# PR because they are the ones that need a human look.
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      pip-minor-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
