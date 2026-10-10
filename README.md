@@ -1,5 +1,9 @@
 # AMES — Containment for Autonomous AI Agents
 
+[![CI](https://github.com/kaymyg/ames/actions/workflows/ci.yml/badge.svg)](https://github.com/kaymyg/ames/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/kaymyg/ames/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaymyg/ames/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **A nine-layer framework whose purpose is to prevent an AI agent from escaping
 its execution environment — and, when prevention fails, to make the failure
 immediately visible, provably attributable, and automatically stopped.**
